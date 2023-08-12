@@ -4,10 +4,12 @@ import re
 from collections import defaultdict
 from typing import Final, Iterable, NamedTuple
 
-TOKEN_SIZE: Final[int] = 1
-NGRAM_SIZE: Final[int] = TOKEN_SIZE * 20
+TOKEN_SIZE: Final[int] = 3
+NGRAMS: Final[int] = 6
+NGRAM_SIZE: Final[int] = TOKEN_SIZE * NGRAMS
 START: Final[str] = "^" * TOKEN_SIZE
 MODEL: dict[str, dict[str, int]] = defaultdict(lambda: defaultdict(int))
+MODEL_FILE: Final[str] = f"model_{TOKEN_SIZE}_{NGRAMS}.json"
 
 
 class NToken(NamedTuple):
@@ -53,10 +55,8 @@ def main() -> None:
     corpus_pattern = "/Users/jose.adm/Downloads/spanish-corpus/spanishText_*"
     for i, file in enumerate(glob.glob(corpus_pattern)):
         process_file(file)
-        if i > 5:
-            break
 
-    save_model("model.json")
+    save_model(MODEL_FILE)
 
 
 # Press the green button in the gutter to run the script.
