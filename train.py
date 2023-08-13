@@ -55,6 +55,7 @@ def process_file(file: str) -> None:
 
 
 def save_model(fname: str) -> None:
+    print(f"saving model to {fname}")
     with open(fname, "wb") as f:
         f.write(json.dumps(MODEL))
 
