@@ -1,10 +1,14 @@
 import glob
-import json
 import re
 from collections import defaultdict
 from typing import Final, Iterable, NamedTuple
 
-TOKEN_SIZE: Final[int] = 3
+try:
+    import orjson as json
+except ImportError:
+    import json
+
+TOKEN_SIZE: Final[int] = 4
 NGRAMS: Final[int] = 6
 NGRAM_SIZE: Final[int] = TOKEN_SIZE * NGRAMS
 START: Final[str] = "^" * TOKEN_SIZE
@@ -35,6 +39,9 @@ def tokens(text: str) -> Iterable[str]:
 def ngrams(text: str) -> Iterable[NToken]:
     ngram = START
     for token in tokens(text):
+        if not token.strip() and not ngram[-TOKEN_SIZE:].strip():
+            continue
+
         yield NToken(token=token, ngram=ngram)
         ngram = (ngram + token)[-NGRAM_SIZE:]
 
@@ -47,12 +54,12 @@ def process_file(file: str) -> None:
 
 
 def save_model(fname: str) -> None:
-    with open(fname, "wt", encoding="utf-8") as f:
-        json.dump(MODEL, f, indent=2)
+    with open(fname, "wb") as f:
+        f.write(json.dumps(MODEL))
 
 
 def main() -> None:
-    corpus_pattern = "/Users/jose.adm/Downloads/spanish-corpus/spanishText_*"
+    corpus_pattern = "./corpus/*"
     for i, file in enumerate(glob.glob(corpus_pattern)):
         process_file(file)
 
