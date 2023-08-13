@@ -14,6 +14,7 @@ NGRAM_SIZE: Final[int] = TOKEN_SIZE * NGRAMS
 START: Final[str] = "^" * TOKEN_SIZE
 MODEL: dict[str, dict[str, int]] = defaultdict(lambda: defaultdict(int))
 MODEL_FILE: Final[str] = f"model_{TOKEN_SIZE}_{NGRAMS}.json"
+INPUT_ENCODING: Final[str] = "iso-8859-15"
 
 
 class NToken(NamedTuple):
@@ -22,7 +23,7 @@ class NToken(NamedTuple):
 
 
 def load_corpus_file(archivo: str) -> Iterable[str]:
-    with open(archivo, "rt", encoding="iso-8859-15") as f:
+    with open(archivo, "rt", encoding=INPUT_ENCODING) as f:
         text = f.read()
 
     pattern = r"<doc.*?>(.*?)</doc>"
