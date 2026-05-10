@@ -1,3 +1,5 @@
+#!/usr/bin/env python
+
 import random
 from typing import Final
 
@@ -7,7 +9,7 @@ except ImportError:
     import json
 
 TOKEN_SIZE: Final[int] = 4
-NGRAMS: Final[int] = 6
+NGRAMS: Final[int] = 3
 NGRAM_SIZE: Final[int] = TOKEN_SIZE * NGRAMS
 START: Final[str] = "^" * TOKEN_SIZE
 MODEL_FILE: Final[str] = f"model_{TOKEN_SIZE}_{NGRAMS}.json"
@@ -30,7 +32,7 @@ def predict(text: str = START) -> str:
     )[0]
 
 
-def generate(start: str = START, length: int = 1000) -> str:
+def generate(start: str = START, length: int = 10000) -> str:
     text = start
     for i in range(length):
         token = predict(text)
